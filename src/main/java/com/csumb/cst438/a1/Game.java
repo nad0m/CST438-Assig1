@@ -61,7 +61,7 @@ public class Game {
         state = 1;
         word = randomWord(); // modification 1
         createDisplayWord();
-        
+        letterList.clear();
     }
     
     /*
