@@ -89,6 +89,8 @@ public class MyHttpServer {
                                             response = "<!DOCTYPE html><html><head><title>MyHttpServer</title></head><body><h2>Hangman</h2>"
                                             + "<img src=\"" + "h" + game.getState() + ".gif" + "\">"
                                             + "<h2 style=\"font-family:'Lucida Console', monospace\"> " + game.getDisplayWord() + "</h2>"
+                                            + "<div style=\"background-color:#e1e5e0; width:300px; height:200px;\">"
+                                            + "<h2 style=\"font-family:'Lucida Console', monospace\">" + game.getLetterList() + "</h2></div>"
                                             + "<form action=\"/\" method=\"get\"> "
                                             + "Guess a character <input type=\"text\" name=\"guess\"><br>"
                                             + "<input type=\"submit\" value=\"Submit\">" + "</form></body></html>";
@@ -104,6 +106,8 @@ public class MyHttpServer {
                                             response = "<!DOCTYPE html><html><head><title>MyHttpServer</title></head><body><h2>Hangman</h2>"
                                             + "<img src=\"" + "h" + game.getState() + ".gif" + "\">"
                                             + "<h2 style=\"font-family:'Lucida Console', monospace\"> " + game.getDisplayWord() + "</h2>"
+                                            + "<div style=\"background-color:#e1e5e0; width:300px; height:200px;\">"
+                                            + "<h2 style=\"font-family:'Lucida Console', monospace\">" + game.getLetterList() + "</h2></div>"
                                             + "<form action=\"/\" method=\"get\"> "
                                             + "Guess a character <input type=\"text\" name=\"guess\"><br>"
                                             + "<input type=\"submit\" value=\"Submit\">" + "</form></body></html>";
@@ -118,6 +122,8 @@ public class MyHttpServer {
                                             response = "<!DOCTYPE html><html><head><title>MyHttpServer</title></head><body><h2>Hangman</h2>"
                                             + "<img src=\"" + "h" + game.getState() + ".gif" + "\">"
                                             + "<h2 style=\"font-family:'Lucida Console', monospace\"> " + game.getDisplayWord() + "</h2>"
+                                            + "<div style=\"background-color:#e1e5e0; width:300px; height:200px;\">"
+                                            + "<h2 style=\"font-family:'Lucida Console', monospace\">" + game.getLetterList() + "</h2></div>"
                                             + "<h2 style=\"font-family:'Lucida Console', monospace\">Invalid input - Try again</h2>"
                                             + "<form action=\"/\" method=\"get\"> "
                                             + "Guess a character <input type=\"text\" name=\"guess\"><br>"

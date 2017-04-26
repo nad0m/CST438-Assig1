@@ -3,6 +3,7 @@ package com.csumb.cst438.a1;
 import static com.csumb.cst438.a1.MyHttpServer.RESOURCE_DIR;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 /**
@@ -27,13 +28,15 @@ public class Game {
     private String word;   // the word to be guessed 
     private StringBuffer displayWord; // part of the word (if any) to show user
     private ArrayList<String> wordlist;  // list of words
+    private List<Character> letterList = new ArrayList<Character>();
     
     public Game() {
-        word="computer";
+        word="";
         createDisplayWord();
         state=1;
         wordlist=null;
         generator = new Random();
+        letterList.clear();
         
     }
     
@@ -43,6 +46,11 @@ public class Game {
     
     public String getWord(){
         return word;
+    }
+    
+    public List<Character> getLetterList(){
+        System.out.println(letterList);
+        return letterList;
     }
     
     public String getDisplayWord(){
@@ -66,10 +74,16 @@ public class Game {
      */
     public int playGame(char guess) {
             System.out.println(isValidInput(guess));
-            if(!isValidInput(guess))
+            
+            guess = Character.toLowerCase(guess);
+            
+            if(!isValidInput(guess) || isUsed(guess)) // modification 2 - test for input
             {
               return 4;   // bad input
             }
+            
+            letterList.add(guess);
+            
             boolean correctGuess = updateDisplayWord(guess);
             
             if (correctGuess==false) { 
@@ -89,8 +103,15 @@ public class Game {
     
     public boolean isValidInput(char guess)
     {
-        return Character.isLetter(guess);
+        return Character.isLetter(guess); //returns false if guess is not a letter
     }
+    
+    public boolean isUsed(char guess)
+    {
+        return letterList.indexOf(guess) > -1; //returns true if guess is in letterList
+    }
+    
+    
     /**
      * update display word to show any occurrences of guess
      * There is a space character between each letter, and 
