@@ -34,6 +34,7 @@ public class Game {
         state=1;
         wordlist=null;
         generator = new Random();
+        
     }
     
     public int getState(){
@@ -50,7 +51,7 @@ public class Game {
     
     public void startNewGame() {
         state = 1;
-        word = "computer";
+        word = randomWord(); // modification 1
         createDisplayWord();
         
     }
@@ -64,7 +65,13 @@ public class Game {
      *        3 = bad guess.  Lost game.
      */
     public int playGame(char guess) {
+            System.out.println(isValidInput(guess));
+            if(!isValidInput(guess))
+            {
+              return 4;   // bad input
+            }
             boolean correctGuess = updateDisplayWord(guess);
+            
             if (correctGuess==false) { 
                 state++;
                 if (state==7) {
@@ -78,6 +85,11 @@ public class Game {
             } else {
                return 1; // all characters has been guessed, user has won game.
             }
+    }
+    
+    public boolean isValidInput(char guess)
+    {
+        return Character.isLetter(guess);
     }
     /**
      * update display word to show any occurrences of guess

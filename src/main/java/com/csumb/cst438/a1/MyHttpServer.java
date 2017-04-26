@@ -47,8 +47,20 @@ public class MyHttpServer {
 				// come here to play the game
                                 String response = "";
                                 // get cookie value from http request
-                                String requestCookie = t.getRequestHeaders().getFirst("Cookie");
+                                
+                                t.getResponseHeaders().set("Content-Type", "text/html");
+                                if (cookie!=null) 
+                                {
+                                    t.getResponseHeaders().set("Set-Cookie", cookie);
+                                }                        
+                                else 
+                                     t.getResponseHeaders().set("Set-Cookie", "0");
+                           
+                                String requestCookie = t.getResponseHeaders().getFirst("Set-Cookie");
+
+                                System.out.println("set-cookie=" + t.getResponseHeaders().getFirst("Set-Cookie"));
                                 System.out.println("Cookie=" + requestCookie);
+                                
                                 // if there is no cookie, or it is "0" or differfent from the current value, then start a new game
                                 if (requestCookie==null || requestCookie.equals("0") || cookie.equals("0") || !requestCookie.equals(cookie)) {
                                     game.startNewGame();
@@ -61,8 +73,17 @@ public class MyHttpServer {
                                             + "<input type=\"submit\" value=\"Submit\">" + "</form></body></html>";
                                 } else {
                                     // continue with current game
-                                    char ch = uri.charAt(uri.length()-1);  // letter that user has guessed
+                                    char ch = 0;
+                                    
+                                    if (uri.length() <= 9) // default uri length is 8 + user input = 9. Any more than 9 is invalid.
+                                    {
+                                        System.out.println("good input");
+                                        ch = uri.charAt(uri.length()-1);  // letter that user has guessed
+                                    }
+                                    
                                     int result = game.playGame(ch);
+                                 
+                                    
                                     switch(result) {
                                         case 0: // good guess, continue game
                                             response = "<!DOCTYPE html><html><head><title>MyHttpServer</title></head><body><h2>Hangman</h2>"
@@ -93,14 +114,20 @@ public class MyHttpServer {
                                             + "</body></html>";
                                              cookie="0";
                                              break;
+                                        case 4: // invalid 
+                                            response = "<!DOCTYPE html><html><head><title>MyHttpServer</title></head><body><h2>Hangman</h2>"
+                                            + "<img src=\"" + "h" + game.getState() + ".gif" + "\">"
+                                            + "<h2 style=\"font-family:'Lucida Console', monospace\"> " + game.getDisplayWord() + "</h2>"
+                                            + "<h2 style=\"font-family:'Lucida Console', monospace\">Invalid input - Try again</h2>"
+                                            + "<form action=\"/\" method=\"get\"> "
+                                            + "Guess a character <input type=\"text\" name=\"guess\"><br>"
+                                            + "<input type=\"submit\" value=\"Submit\">" + "</form></body></html>";
+                                            break;
+                                           
                                     }
                                     
                                 }
-                                t.getResponseHeaders().set("Content-Type", "text/html");
-                                if (cookie!=null) 
-                                     t.getResponseHeaders().set("Set-Cookie", cookie);
-                                else 
-                                     t.getResponseHeaders().set("Set-Cookie", "0");
+                                
                                 System.out.println("New cookie:" + cookie);
                                 t.sendResponseHeaders(200, response.length());
                                 System.out.println("response=" + response);
