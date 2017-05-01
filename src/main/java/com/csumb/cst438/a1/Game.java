@@ -10,7 +10,7 @@ import java.util.Scanner;
  * Game contains logic to play hangman game.
  * Includes code to generate new words,
  * process user guess, determine win or lose.
- * @author David
+ * @author Huy
  * @version 1.0
  */
 public class Game {
@@ -71,6 +71,7 @@ public class Game {
      *        1 = good guess.  Win game. 
      *        2 = bad guess.  continue game
      *        3 = bad guess.  Lost game.
+     *        4 = bad input. Redo.
      */
     public int playGame(char guess) {
             System.out.println(isValidInput(guess));
@@ -79,7 +80,7 @@ public class Game {
             
             if(!isValidInput(guess) || isUsed(guess)) // modification 2 - test for input
             {
-              return 4;   // bad input
+              return 4;   // bad input, continue with same state
             }
             
             letterList.add(guess);
