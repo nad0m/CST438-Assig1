@@ -31,11 +31,11 @@ public class Game {
     private List<Character> letterList = new ArrayList<Character>();
     
     public Game() {
-        word="";
-        createDisplayWord();
-        state=1;
-        wordlist=null;
         generator = new Random();
+        wordlist=null;
+        randomWord();
+        createDisplayWord();
+        state=1;       
         letterList.clear();
         
     }
@@ -59,7 +59,7 @@ public class Game {
     
     public void startNewGame() {
         state = 1;
-        word = randomWord(); // modification 1
+        randomWord(); // modification 1
         createDisplayWord();
         letterList.clear();
     }
@@ -101,6 +101,7 @@ public class Game {
                return 1; // all characters has been guessed, user has won game.
             }
     }
+    
     
     public boolean isValidInput(char guess)
     {
@@ -150,7 +151,7 @@ public class Game {
      * 
      * @return a word from the list
      */
-    private String randomWord() {
+    public String randomWord() {
 	try {
             if (wordlist == null) {
 		wordlist = new ArrayList<String>();
@@ -162,7 +163,8 @@ public class Game {
 		infile.close();
             }
             int t = generator.nextInt(wordlist.size());
-            return wordlist.get(t);
+            word = wordlist.get(t);
+            return word;
 
         } catch (Exception e) {
             System.out.println("Error randomWord: reading wordlist. " + e.getMessage());

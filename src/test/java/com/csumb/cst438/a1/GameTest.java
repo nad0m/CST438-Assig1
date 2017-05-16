@@ -42,16 +42,33 @@ public class GameTest {
     @org.junit.Test
     public void testGetState() {
         System.out.println("getState");
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        int j = 0;
         Game instance = new Game();
         int expResult = 1;
         int result = instance.getState();
         assertEquals(expResult, result);
-        instance.playGame('c');
+        
+        String word = instance.getWord();
+        
+        while (word.indexOf(alphabet.charAt(j)) > -1)
+        {
+            j++;
+        }
+        // First guess: if incorrect, increase expResult by 1, else do nothing
+        int returnValue = instance.playGame(word.charAt(j)); // guess letter not in word     
+        if (returnValue > 1 && returnValue < 4){
+            expResult++;
+        }
+      
+        // Second guess: if incorrect, increase expResult by 1, else do nothing
+        returnValue = instance.playGame(word.charAt(0)); // guess first letter of word    
+        if (returnValue > 1 && returnValue < 4){
+            expResult++;
+        }
+        
         result = instance.getState();
         assertEquals(expResult, result);
-        instance.playGame('d');
-        result = instance.getState();
-        assertEquals(expResult+1, result);
     }
 
     /**
@@ -61,7 +78,7 @@ public class GameTest {
     public void testGetWord() {
         System.out.println("getWord");
         Game instance = new Game();
-        String expResult = "computer";
+        String expResult = instance.randomWord();
         String result = instance.getWord();
         assertEquals(expResult, result);
     }
@@ -73,13 +90,32 @@ public class GameTest {
     public void testGetDisplayWord() {
         System.out.println("getDisplayWord");
         Game instance = new Game();
-        String expResult = "_ _ _ _ _ _ _ _";
+        int size = instance.getWord().length();
+        String expResult = "";
+        
+        for (int i = 0; i < size; i++)
+        {
+            if (i == size-1)
+            {
+                expResult += "_";
+            }else{
+                   expResult += "_ ";
+                    }
+        }
+        System.out.println(expResult);
+        
         String result = instance.getDisplayWord();
         assertEquals(expResult, result);
-        instance.playGame('r');
+        
+        char guess = instance.getWord().charAt(0);
+        instance.playGame(guess);
+        expResult = expResult.substring(1);
+        
+        String guessString = Character.toString(guess);
+        expResult = guessString + expResult;
+        System.out.println(expResult);        
         result = instance.getDisplayWord();
-        assertEquals("_ _ _ _ _ _ _ r", result);
-
+        assertEquals(expResult, result);
     }
 
     /**
@@ -105,42 +141,61 @@ public class GameTest {
      */
     @org.junit.Test
     public void testPlayGame() {
-        System.out.println("playGame");
-        char guess = 'c';
+        System.out.println("playGame");       
         Game instance = new Game();
-        int expResult = 0;
-        int result = instance.playGame(guess);
+        String word = instance.getWord(); 
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        int j = 0;
+        int expResult = 2;
+        
+        for (int i = 0; i < 6; i++)
+        {
+            if (i == 5)
+            {
+                System.out.println(i);
+                expResult = 3;
+            }
+            
+            while (word.indexOf(alphabet.charAt(j)) > -1)
+            {
+                j++;
+            }
+            
+            char guess = alphabet.charAt(j);
+            j++;
+            int result = instance.playGame(guess);
+            assertEquals(expResult, result);
+        }
+        
+
+        instance = new Game();
+        word = instance.getWord();
+        // ---- Test for correct guess ----
+        char guess = word.charAt(0); // first letter of word
+        int result = instance.playGame(guess); //initialize
+        
+        expResult = 0;
+        
         assertEquals(expResult, result);
-        result = instance.playGame('d');
-        assertEquals(2, result);
-        result = instance.playGame('f');
-        assertEquals(2, result);
-        result = instance.playGame('g');
-        assertEquals(2, result);
-        result = instance.playGame('h');
-        assertEquals(2,result);
-        result = instance.playGame('j');
-        assertEquals(2,result);
-        result = instance.playGame('k');
-        assertEquals(3,result);
- 
-        instance.startNewGame();
-        result = instance.playGame('c');
-        assertEquals(0,result);
-        result = instance.playGame('o');
-        assertEquals(0,result);
-        result = instance.playGame('m');
-        assertEquals(0,result);
-        result = instance.playGame('p');
-        assertEquals(0,result);
-        result = instance.playGame('u');
-        assertEquals(0,result);
-        result = instance.playGame('t');
-        assertEquals(0,result);
-        result = instance.playGame('e');
-        assertEquals(0,result);
-        result = instance.playGame('r');
-        assertEquals(1,result);
+        
+        // ---- Test for game win ----
+        String playedWords = "";
+        expResult = 1;       
+        for (int i = 1; i < word.length(); i++)
+        {
+            guess = word.charAt(i);
+            if (playedWords.indexOf(guess) == -1)
+            {
+                playedWords += guess;
+                result = instance.playGame(guess);
+            }
+                                    
+        }       
+        assertEquals(expResult, result);
+         
+        
+        
+
     }
     
 }
